@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=600px">
+    <title>Saved Lists</title>
+    <style>
+        /* Dark mode styles for the saved lists page */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            font-size: 17px;
+            width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 1rem;
+            border-bottom: 1px solid #1e1e1e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #bb86fc;
+        }
+
+        #saved-lists {
+            padding: 1rem;
+            margin-top: 1rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .saved-item {
+            background-color: #1e1e1e;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            border: 1px solid #bb86fc;
+        }
+
+        .saved-item h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #03dac6;
+        }
+
+        .saved-item p {
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+        nav a, nav a:link, nav a:visited{ color: #efefef;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Saved Lists</h1>
+        <nav>
+        <a href="index.html">Back to New</a></nav>
+    </header>
+
+    <div id="saved-lists">
+        </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedListsContainer = document.getElementById('saved-lists');
+
+        function renderSavedLists() {
+            // Clear the container before re-rendering
+            savedListsContainer.innerHTML = '';
+            
+            const items = Object.keys(localStorage).sort().reverse();
+
+            if (items.length === 0) {
+                savedListsContainer.innerHTML = '<p>No saved lists found.</p>';
+                return;
+            }
+
+            items.forEach(key => {
+                const content = localStorage.getItem(key);
+                const savedItemDiv = document.createElement('div');
+                savedItemDiv.className = 'saved-item';
+                
+                const date = new Date(key);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                savedItemDiv.innerHTML = `
+                    <h2>${formattedDate}</h2>
+                    <p>${content}</p>
+                    <button class="delete-button" data-key="${key}">Delete</button>
+                `;
+                savedListsContainer.appendChild(savedItemDiv);
+            });
+
+            // Attach event listeners to all new delete buttons
+            document.querySelectorAll('.delete-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const keyToDelete = event.target.dataset.key;
+                    if (confirm('Are you sure you want to delete this list?')) {
+                        localStorage.removeItem(keyToDelete);
+                        // Re-render the list after deletion
+                        renderSavedLists();
+                    }
+                });
+            });
+        }
+
+        renderSavedLists(); // Initial render
+    });
+</script>
+
+</body>
+</html>

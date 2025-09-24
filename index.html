@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=600px">
+    <title>MyList</title>
+    <style>
+            /* Dark mode styles for the saved lists page */
+        body{background-color:#121212;color:#e0e0e0;font-family:Arial,sans-serif;font-size:17px;width:600px;margin:0 auto;padding:1rem;box-sizing:border-box}header{background-color:#1e1e1e;padding:1rem;border-bottom:1px solid #1e1e1e;display:flex;justify-content:space-between;align-items:center}header h1{margin:0;font-size:1.5rem;color:#bb8}nav ul li{display:inline-block;font-size:1.4rem;margin-right:1em}main{border:1px solid #bb86fc;border-radius:8px;padding:1.4rem}main section{margin:0 auto;display:block;width:100%}button{font-size:1.5rem;display:inline-block;margin:10px 1em 10px 1em}#saved-lists{padding:1rem;margin-top:1rem;display:grid;gap:1.5rem}.saved-item{background-color:#1e1e1e;padding:1rem;border-radius:8px;box-shadow:0 4px 8px rgb(0 0 0 / .5);border:1px solid #bb86fc}.saved-item h2{margin-top:0;font-size:1.1rem;color:#03dac6}.saved-item p{white-space:pre-wrap;line-height:1.6}#textArea{background:#e8e8e8;font-size:1.125rem;width:90%;margin:1rem auto;height:33vh}nav a,nav a:link,nav a:visited{color:#efefef}h1 small{font-size:.85rem;color:#eee}
+    </style>
+    
+</head>
+<body>
+
+    <header>
+        <h1>MyList <small>https://shorturl.at/irz7L</small></h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">New</a></li>
+                <li><a href="saved-page.html">View Saved</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+<section>
+        <div id="datetime"></div>
+        <form>
+            <textarea id="textArea" placeholder="Start typing..."></textarea>
+        </form>
+    </section>
+    </main>
+
+    <footer>
+        <button class="icon-button">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6zm-1-9h2V5h-2v3z"/></svg>
+            New
+        </button>
+        <button class="icon-button">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+            Save
+        </button>
+        <button class="icon-button">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19 8H5c-1.1 0-2 .9-2 2v10h18V10c0-1.1-.9-2-2-2zm-1 4h-2v-2h-2v2h-2v-2h-2v2H6V6h12v6zm-2 2h-4v4h4v-4zm0 6h-4v4h4v-4z"/></svg>
+            View
+        </button>
+    </footer>
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit' 
+        };
+        const formattedDate = now.toLocaleDateString('en-US', options);
+        document.getElementById('datetime').textContent = formattedDate;
+    }
+    
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    function saveList() {
+        const listText = document.querySelector('textarea').value;
+        if (listText.trim() === '') {
+            alert('Please enter some text to save.');
+            return;
+        }
+
+        const now = new Date();
+        const key = now.toISOString();
+        localStorage.setItem(key, listText);
+        alert('List saved successfully!');
+    }
+
+    function viewSavedLists() {
+        window.location.href = 'saved-page.html';
+    }
+
+    // Attach event listeners to the buttons
+    document.querySelector('footer button:nth-child(2)').addEventListener('click', saveList);
+    document.querySelector('footer button:nth-child(3)').addEventListener('click', viewSavedLists);
+</script>
+</body>
+</html>
